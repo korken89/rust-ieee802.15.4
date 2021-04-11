@@ -241,6 +241,12 @@ pub struct Header {
     /// PAN ID Compress
     pub pan_id_compress: bool,
 
+    /// Suppress sequence number
+    pub seq_no_suppress: bool,
+
+    /// Information element present
+    pub ie_present: bool,
+
     /// Frame version
     pub version: FrameVersion,
 
@@ -325,6 +331,8 @@ impl Header {
         let frame_pending    = (buf[0] >> 4) & 0x1;
         let ack_request      = (buf[0] >> 5) & 0x1;
         let pan_id_compress  = (buf[0] >> 6) & 0x1;
+        let seq_no_suppress  = (buf[1] & 0x1) != 0;
+        let ie_present       = (buf[1] & 0x2) != 0;
         let dest_addr_mode   = (buf[1] >> 2) & 0x3;
         let frame_version    = (buf[1] >> 4) & 0x3;
         let source_addr_mode = (buf[1] >> 6) & 0x3;
@@ -339,7 +347,7 @@ impl Header {
         let dest_addr_mode = AddressMode::from_bits(dest_addr_mode)?;
         let source_addr_mode = AddressMode::from_bits(source_addr_mode)?;
 
-        if frame_version > 0b01 {
+        if frame_version > FrameVersion::Ieee802154 as u8 {
             return Err(DecodeError::InvalidFrameVersion(frame_version));
         }
         let version = FrameVersion::from_bits(frame_version)
@@ -374,6 +382,8 @@ impl Header {
             frame_pending,
             ack_request,
             pan_id_compress,
+            ie_present,
+            seq_no_suppress,
             version,
             destination,
             source,
@@ -487,6 +497,15 @@ pub enum FrameType {
 
     /// MAC command
     MacCommand = 0b011,
+
+    /// Multipurpose
+    Multipurpose = 0b101,
+
+    /// Fragment of Fragment Ack
+    FragOrFragAck = 0b110,
+
+    /// Extended
+    Extended = 0b111,
 }
 
 impl FrameType {
@@ -974,7 +993,9 @@ impl FrameContent {
             FrameType::MacCommand => {
                 let (command, used) = Command::decode(buf)?;
                 Ok((FrameContent::Command(command), used))
-            }
+            },
+            // TODO: implement 802.15.4-2015 frame types
+            _ => unimplemented!(),
         }
     }
     /// Encode frame content into byte buffer
