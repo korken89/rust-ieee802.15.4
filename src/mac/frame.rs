@@ -25,6 +25,7 @@ use crate::mac::command::Command;
 /// [decode]: #method.decode
 /// [encode]: #method.encode
 #[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub struct Frame<'p> {
     /// Header
     pub header: Header,
@@ -225,6 +226,7 @@ pub enum WriteFooter {
 
 /// MAC frame header
 #[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub struct Header {
     /// Frame Type
     pub frame_type: FrameType,
@@ -485,6 +487,7 @@ impl Header {
 ///
 /// Part of [`Header`].
 #[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub enum FrameType {
     /// Beacon
     Beacon = 0b000,
@@ -538,6 +541,7 @@ impl FrameType {
 /// Part of [`Header`]. Auxiliary security headers are currently unsupported by
 /// this implementation.
 #[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub enum Security {
     /// No auxiliary security header is present
     None = 0b0,
@@ -567,6 +571,7 @@ impl Security {
 
 /// Defines version information for a frame
 #[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub enum FrameVersion {
     /// A frame conforming to the 802.15.4-2003 standard
     Ieee802154_2003 = 0b00,
@@ -602,6 +607,7 @@ impl FrameVersion {
 
 /// Defines the type of Address
 #[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub enum AddressMode {
     /// PAN identifier and address field are not present
     None = 0b00,
@@ -647,6 +653,7 @@ impl AddressMode {
 /// let pan_id = PanId(0x0123);
 /// ```
 #[derive(Clone, Copy, Debug, Eq, Hash, Hash32, PartialEq)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub struct PanId(pub u16);
 
 impl PanId {
@@ -732,6 +739,7 @@ impl PanId {
 /// let short_address = ShortAddress(0x0123);
 /// ```
 #[derive(Clone, Copy, Debug, Eq, Hash, Hash32, PartialEq)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub struct ShortAddress(pub u16);
 
 impl ShortAddress {
@@ -822,6 +830,7 @@ impl ShortAddress {
 /// let ext_address = ExtendedAddress(0x0123456789abcdef);
 /// ```
 #[derive(Clone, Copy, Debug, Eq, Hash, Hash32, PartialEq)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub struct ExtendedAddress(pub u64);
 
 impl ExtendedAddress {
@@ -851,6 +860,7 @@ impl ExtendedAddress {
 
 /// An address that might contain an PAN ID and address
 #[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub enum Address {
     /// No address
     None,
@@ -964,6 +974,7 @@ impl Address {
 
 /// Content of a frame
 #[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub enum FrameContent
 {
     /// Beacon frame content
@@ -1017,6 +1028,7 @@ impl FrameContent {
 
 /// Signals an error that occured while decoding bytes
 #[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub enum DecodeError {
     /// Buffer does not contain enough bytes
     NotEnoughBytes,

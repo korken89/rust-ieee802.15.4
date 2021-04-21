@@ -9,6 +9,7 @@ use crate::mac::{DecodeError, ExtendedAddress, ShortAddress};
 
 /// Beacon order is used to calculate the beacon interval
 #[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub enum BeaconOrder {
     /// Used to calculate at which interval beacons are sent
     ///
@@ -40,6 +41,7 @@ impl From<BeaconOrder> for u8 {
 
 /// Superframe order, amount of time during wich this superframe is active
 #[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub enum SuperframeOrder {
     /// Ammount of time that the superframe is active
     ///
@@ -74,6 +76,7 @@ impl From<SuperframeOrder> for u8 {
 /// The superframe specification describes the organisation of frames in the
 /// air when using superframes and/or periodical beacons.
 #[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub struct SuperframeSpecification {
     /// Beacon order, 0-15, where 15 is on demand.
     ///
@@ -170,6 +173,7 @@ impl SuperframeSpecification {
 
 /// Direction of data
 #[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 enum Direction {
     /// Receive data
     Receive,
@@ -179,6 +183,7 @@ enum Direction {
 
 /// Descriptor of the guaranteed time slots (GTSs)
 #[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub struct GuaranteedTimeSlotDescriptor {
     /// Device short address used by this slot
     short_address: ShortAddress,
@@ -266,6 +271,7 @@ const PERMIT: u8 = 0b1000_0000;
 
 /// Information of the guaranteed time slots (GTSs)
 #[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub struct GuaranteedTimeSlotInformation {
     /// Permit GTS
     pub permit: bool,
@@ -395,6 +401,7 @@ const EXTENDED_MASK: u8 = 0b0111_0000;
 /// ```
 ///
 #[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub struct PendingAddress {
     short_address_count: usize,
     short_addresses: [ShortAddress; 7],
@@ -504,6 +511,7 @@ impl PendingAddress {
 }
  /// Beacon frame
 #[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub struct Beacon {
     /// Superframe specification
     pub superframe_spec: SuperframeSpecification,
